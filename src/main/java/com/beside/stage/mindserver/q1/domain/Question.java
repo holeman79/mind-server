@@ -1,6 +1,7 @@
-package com.beside.stage.mindserver.domain.q1;
+package com.beside.stage.mindserver.q1.domain;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -8,13 +9,15 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Question {
     @Id
     @Column(name = "QUESTION_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int questionNumber;
+    @Embedded
+    private QuestionNumber questionNumber;
 
     private String content;
 
