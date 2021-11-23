@@ -1,6 +1,7 @@
 package com.beside.stage.mindserver.q1.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ public class Answer {
     @Embedded
     private CharacterImage resultImage;
 
+    @Builder
     public Answer(final AnswerNumber answerNumber, final String text, final String resultText, final CharacterImage resultImage) {
         this.answerNumber = answerNumber;
         this.text = text;

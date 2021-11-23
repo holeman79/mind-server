@@ -85,7 +85,7 @@ public class QuestionReadDocumentTest extends ApiDocumentationTest {
         given(questionService.findAll()).willReturn(questionDtos);
 
         //when
-        String requestUrl = "/api/questions";
+        String requestUrl = "/api/q1/questions";
         ResultActions result = this.mockMvc.perform(
                 get(requestUrl)
         );

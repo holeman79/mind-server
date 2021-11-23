@@ -1,21 +1,25 @@
 package com.beside.stage.mindserver.q1.domain;
 
-import javax.persistence.Embeddable;
+import com.beside.stage.mindserver.generic.domain.uploadfile.UploadFile;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Embedded;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CharacterImage {
-    private final String fileName;
-
-    private final String storedFileName;
-
     @Enumerated(EnumType.STRING)
-    private final CharacterImagePosition characterImagePosition;
+    private CharacterImagePosition characterImagePosition;
 
+    @Embedded
+    private UploadFile uploadFile;
+
+    @Builder
     public CharacterImage(final String fileName, final String storedFileName, final CharacterImagePosition characterImagePosition) {
-        this.fileName = fileName;
-        this.storedFileName = storedFileName;
+        this.uploadFile = new UploadFile(fileName, storedFileName);
         this.characterImagePosition = characterImagePosition;
     }
 }

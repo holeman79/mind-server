@@ -1,10 +1,10 @@
 package com.beside.stage.mindserver.q1.domain;
 
 import com.beside.stage.mindserver.generic.domain.number.Number;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Embeddable;
-
-@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionNumber extends Number {
     private static final String INDICATION = "Q";
 

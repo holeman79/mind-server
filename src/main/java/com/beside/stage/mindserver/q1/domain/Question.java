@@ -1,6 +1,7 @@
 package com.beside.stage.mindserver.q1.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,10 @@ public class Question {
     @JoinColumn(name = "QUESTION_ID")
     private List<Answer> answers;
 
-
+    @Builder
+    private Question(final QuestionNumber questionNumber, final String content, final List<Answer> answers) {
+        this.questionNumber = questionNumber;
+        this.content = content;
+        this.answers = answers;
+    }
 }
