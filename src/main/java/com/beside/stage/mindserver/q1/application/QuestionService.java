@@ -5,6 +5,7 @@ import com.beside.stage.mindserver.q1.application.dto.QuestionCreateDto;
 import com.beside.stage.mindserver.q1.application.dto.QuestionDto;
 import com.beside.stage.mindserver.q1.domain.Answer;
 import com.beside.stage.mindserver.q1.domain.Question;
+import com.beside.stage.mindserver.q1.domain.QuestionNumber;
 import com.beside.stage.mindserver.q1.domain.QuestionRepository;
 import com.beside.stage.mindserver.q1.infra.FileStore;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,15 @@ public class QuestionService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Question save(final QuestionCreateDto questionCreateDto) throws IOException {
         final List<Answer> answers = new ArrayList<>();
+        String questionNumber = new QuestionNumber(questionCreateDto.getNumber()).toString();
         for (AnswerCreateDto answerCreateDto : questionCreateDto.getAnswerCreateDtos()) {
-            UploadFile uploadFile = fileStore.storeFile(answerCreateDto.getImageFile());
+            UploadFile uploadFile = fileStore.storeFile(answerCreateDto.getImageFile(), questionNumber);
             answers.add(answerCreateDto.toEntity(uploadFile));
         }
-        return questionRepository.save(questionCreateDto.toEntity(answers));
+        List<UploadFile> uploadFiles = fileStore.storeFiles(questionCreateDto.getRandomOptionImages(), questionNumber);
+        return questionRepository.save(questionCreateDto.toEntity(answers, uploadFiles));
     }
 }
