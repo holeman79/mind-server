@@ -1,5 +1,6 @@
 package com.beside.stage.mindserver.q1.domain;
 
+import com.beside.stage.mindserver.generic.domain.uploadfile.UploadFile;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "ANSWERS")
 public class Answer {
     @Id
     @Column(name = "ANSWER_ID")
@@ -23,14 +25,17 @@ public class Answer {
 
     private String resultText;
 
+    private boolean isRandom;
+
     @Embedded
-    private CharacterImage resultImage;
+    private UploadFile uploadFile;
 
     @Builder
-    public Answer(final AnswerNumber answerNumber, final String text, final String resultText, final CharacterImage resultImage) {
+    private Answer(final AnswerNumber answerNumber, final String text, final String resultText, final boolean isRandom, final UploadFile uploadFile) {
         this.answerNumber = answerNumber;
         this.text = text;
         this.resultText = resultText;
-        this.resultImage = resultImage;
+        this.isRandom = isRandom;
+        this.uploadFile = uploadFile;
     }
 }

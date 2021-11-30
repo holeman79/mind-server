@@ -15,13 +15,20 @@ public class QuestionCreateDto {
 
     private String content;
 
+    private CharacterImagePosition characterImagePosition;
+
     private List<AnswerCreateDto> answerCreateDtos;
 
-    public Question toEntity(final List<Answer> answers) {
+    private List<MultipartFile> randomOptionImages;
+
+    public Question toEntity(final List<Answer> answers, final List<UploadFile> uploadFiles) {
+        QuestionNumber questionNumber = new QuestionNumber(5);
         return Question.builder()
                 .questionNumber(new QuestionNumber(number))
                 .content(content)
+                .characterImagePosition(characterImagePosition)
                 .answers(answers)
+                .randomOptionImages(uploadFiles)
                 .build();
     }
 
@@ -34,7 +41,7 @@ public class QuestionCreateDto {
 
         private String resultText;
 
-        private CharacterImagePosition characterImagePosition;
+        private boolean isRandom;
 
         private MultipartFile imageFile;
 
@@ -43,11 +50,8 @@ public class QuestionCreateDto {
                     .answerNumber(new AnswerNumber(number))
                     .text(text)
                     .resultText(resultText)
-                    .resultImage(CharacterImage.builder()
-                            .fileName(uploadFile.getFileName())
-                            .storedFileName(uploadFile.getStoredFileName())
-                            .characterImagePosition(characterImagePosition)
-                            .build())
+                    .isRandom(isRandom)
+                    .uploadFile(uploadFile)
                     .build();
         }
     }
