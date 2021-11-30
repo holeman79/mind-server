@@ -9,8 +9,8 @@ import java.util.List;
 public interface FileStore {
     String getFullPath(String filename);
 
-    UploadFile storeFile(MultipartFile multipartFile) throws IOException;
+    UploadFile storeFile(MultipartFile multipartFile, String... inputAdditionalDirectories) throws IOException;
 
-    List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException;
+    List<UploadFile> storeFiles(List<MultipartFile> multipartFiles, String... inputAdditionalDirectories) throws IOException;
 
 }

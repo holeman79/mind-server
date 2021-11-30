@@ -7,13 +7,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class FileStoreImpl implements FileStore {
     private static final String POINT = ".";
+
+    private static final String SLASH = "/";
 
     @Value("${file.dir}")
     private String fileDir;
@@ -24,22 +25,22 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public List<UploadFile> storeFiles(final List<MultipartFile> multipartFiles) throws IOException {
+    public List<UploadFile> storeFiles(final List<MultipartFile> multipartFiles, final String... inputAdditionalDirectories) throws IOException {
         List<UploadFile> uploadFiles = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
-            uploadFiles.add(storeFile(multipartFile));
+            uploadFiles.add(storeFile(multipartFile, inputAdditionalDirectories));
         }
         return uploadFiles;
     }
 
-    @Override
-    public UploadFile storeFile(final MultipartFile multipartFile) throws IOException {
-        if (multipartFile.isEmpty()) {
-            throw new IllegalArgumentException("파일이 비었습니다.");
+    public UploadFile storeFile(final MultipartFile multipartFile, final String... inputAdditionalDirectories) throws IOException {
+        if (Objects.isNull(multipartFile) || multipartFile.isEmpty()) {
+            return null;
         }
         String originalFileName = multipartFile.getOriginalFilename();
         String storedFileName = createStoredFileName(originalFileName);
-        multipartFile.transferTo(new File(getFullPath(storedFileName)));
+        String additionalDirectories = createAdditionalDirectories(inputAdditionalDirectories);
+        multipartFile.transferTo(new File(getFullPath(additionalDirectories + storedFileName)));
         return new UploadFile(originalFileName, storedFileName);
     }
 
@@ -52,5 +53,11 @@ public class FileStoreImpl implements FileStore {
     private String extractExt(final String originalFileName) {
         int pos = originalFileName.lastIndexOf(POINT);
         return originalFileName.substring(pos + 1);
+    }
+
+    String createAdditionalDirectories(final String[] additionalDirectories) {
+        return Arrays.stream(additionalDirectories)
+                .map(directory -> directory + SLASH)
+                .collect(Collectors.joining());
     }
 }
